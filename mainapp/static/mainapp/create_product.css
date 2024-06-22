@@ -1,0 +1,15 @@
+.form-field {
+    margin-bottom: 15px;
+}
+.form-field label {
+    display: block;
+    font-weight: bold;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
