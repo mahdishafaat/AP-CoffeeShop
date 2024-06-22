@@ -130,3 +130,7 @@ body {
     text-align: center;
     padding: 1rem;
 }
+#mostsale-section, #cake-section, #hot-section, #cold-section{
+    padding-top: 50px;
+    margin-top: -50px;
+    }
