@@ -1,10 +1,15 @@
 @font-face {
-    font-family: casablanca;
-    src: '{% static "fonts/Far_CasablancaHeavy.ttf" %}';
-}
+    font-family: Vazirmatn;
+    src: url(../fonts/fonts/ttf/Vazirmatn-Medium.ttf) format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+*{
+    font-family: Vazirmatn;
+} 
 
 body {
-    font-family: casablanca;
     margin: 0;
     padding: 0;
     direction: rtl;
@@ -42,7 +47,7 @@ body {
     display: block;
 }
 .navbar ul li a i {
-    margin-left: 10px; /* فاصله بین آیکون و متن */
+    margin-left: 5px; 
 }
 .dropdown {
     display: none;
@@ -67,7 +72,7 @@ body {
     width: 100%;
     height: 800px;
     overflow: hidden;
-    margin-top: 50px; /* Margin to avoid overlap with fixed navbar */
+    margin-top: 50px; 
 }
 .slider {
     position: relative;
@@ -134,3 +139,9 @@ body {
     padding-top: 50px;
     margin-top: -50px;
     }
+a{
+    font-family: Vazirmatn !important;
+}
+#mostsale, #coldc, #hotc, #cake{
+    font-family: Vazirmatn !important;
+}
