@@ -19,9 +19,15 @@ class Product(models.Model):
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2, validators=[validators.MinValueValidator(0)])
     timeNeeded = models.IntegerField(default=0, validators=[validators.MaxValueValidator(60)])
     image = models.ImageField(upload_to='products/')
+    coffee = models.PositiveIntegerField(default=0)
+    chocolate = models.PositiveIntegerField(default=0)
+    milk = models.PositiveIntegerField(default=0)
+    flour = models.PositiveIntegerField(default=0)
+    sugar = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    raw_materials = models.ManyToManyField(Storage, through='ProductStorage')
+    # raw_materials = models.ManyToManyField(Storage, through='ProductStorage')
+    sold_count = models.IntegerField(default=0)
     vertical = models.BinaryField(auto_created=True, unique=True, blank=True, null=True)
 
     def __str__(self):

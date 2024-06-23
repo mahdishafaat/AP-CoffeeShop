@@ -1,9 +1,9 @@
 from django.contrib import admin
 from .models import Product, Storage, ProductStorage, Order, OrderProduct, Member, CustomerOrder
 
-class ProductStorageInline(admin.TabularInline):
-    model = ProductStorage
-    extra = 1
+# class ProductStorageInline(admin.TabularInline):
+#     model = ProductStorage
+#     extra = 1
 
 class OrderProductInline(admin.TabularInline):
     model = OrderProduct
@@ -19,7 +19,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'price']
-    inlines = (ProductStorageInline,)
+    # inlines = (ProductStorageInline,)
 
 class StorageAdmin(admin.ModelAdmin):
     list_display = ['name', 'stock']
