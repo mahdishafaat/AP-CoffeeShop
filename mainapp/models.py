@@ -6,9 +6,6 @@ from members.models import Member
 class Storage(models.Model):
     name = models.CharField(max_length=100)
     stock = models.IntegerField(default=0, validators=[validators.MinValueValidator(0)])
-
-    # other fields as needed
-
     def __str__(self):
         return self.name
     
@@ -18,11 +15,17 @@ class Product(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2, validators=[validators.MinValueValidator(0)])
     timeNeeded = models.IntegerField(default=0, validators=[validators.MaxValueValidator(60)])
+    coffee = models.PositiveBigIntegerField(default=0)
+    milk = models.PositiveBigIntegerField(default=0)
+    chocolate = models.PositiveBigIntegerField(default=0)
+    flour = models.PositiveBigIntegerField(default=0)
+    sugar = models.PositiveBigIntegerField(default=0)
     image = models.ImageField(upload_to='products/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    raw_materials = models.ManyToManyField(Storage, through='ProductStorage')
+    # raw_materials = models.ManyToManyField(Storage, through='ProductStorage')
     vertical = models.BinaryField(auto_created=True, unique=True, blank=True, null=True)
+    sold_count = models.PositiveBigIntegerField(default=0)
 
     def __str__(self):
         return self.name
