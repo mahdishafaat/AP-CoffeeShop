@@ -13,6 +13,13 @@ class Storage(models.Model):
     
   
 class Product(models.Model):
+    CATEGORY_CHOICES = [
+        ('hot_drinks', 'نوشیدنی گرم'),
+        ('cold_drinks', 'نوشیدنی سرد'),
+        ('cakes', 'کیک'),
+    ]
+    
+    category = models.CharField(_("دسته بندی محصول"),max_length=20, choices=CATEGORY_CHOICES, default='hot_drinks')
     name = models.CharField(_('نام'), max_length=255)
     description = models.CharField( _("توضیحات"), max_length=255, blank=True, null=True)
     price = models.DecimalField(_("قیمت"),default=0, max_digits=10, decimal_places=2, validators=[validators.MinValueValidator(0)])

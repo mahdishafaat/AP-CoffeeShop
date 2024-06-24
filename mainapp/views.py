@@ -16,7 +16,7 @@ class StaffRequiredMixin(UserPassesTestMixin):
 
 class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Product
-    fields = [
+    fields = ['category',
         'name', 'description', 'price', 'timeNeeded', 'coffee', 'milk', 
         'chocolate', 'flour', 'sugar', 'image'
     ]

@@ -9,6 +9,10 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-field">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+        </div>
+        <div class="form-field">
             {{ form.name.label_tag }}
             {{ form.name }}
         </div>
@@ -54,30 +58,36 @@
         </div>
         <input type="submit" value="ذخیره">
     </form>
-    
-
-
-
-
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/create_product.css' %}">
+    <script>
+        $(function() {
+            const categories = [
+                {% for value, label in form.fields.category.choices %}
+                {"value": "{{ value }}", "label": "{{ label }}"},
+                {% endfor %}
+            ];
 
+            const select = $('.category-slider');
+            const slider = $('#category-slider');
+            
+            slider.slider({
+                min: 0,
+                max: categories.length - 1,
+                slide: function(event, ui) {
+                    select.val(categories[ui.value].value).change();
+                }
+            });
 
+            select.hide().change(function() {
+                const value = $(this).val();
+                const index = categories.findIndex(category => category.value === value);
+                slider.slider("value", index);
+            }).change();
+
+            select.trigger('change');
+        });
+    </script>
 </body>
 </html>
 
-
-{% comment %} <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="" method='post'>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit", value="submit" >
-    </form>
-</body>
-</html> {% endcomment %}
