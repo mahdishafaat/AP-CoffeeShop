@@ -11,7 +11,7 @@
 <div class="navbar">
     <ul>
         <li>
-            <a href="#"><i class="fas fa-bars"></i>منو</a>
+            <a id='menu' href="#"><i class="fas fa-bars" id='menu-svg'></i>منو</a>
             <div class="dropdown">
                 <a href="#mostsale-section">محصولات پرفروش</a>
                 <a href="#cold-section">نوشیدنی سرد</a>
@@ -19,9 +19,9 @@
                 <a href="#cake-section">کیک</a>
             </div>
         </li>
-        <li><a href='{% url "index" %}'><i class="fas fa-home"></i>خانه</a></li>
-        <li><a href="#"><i class="fas fa-shopping-cart"></i> سبد خرید</a></li>
-        <li><a href="#"><i class="fas fa-history"></i> سوابق خرید</a></li>
+        <li><a id='home-button' href='{% url "index" %}'><i class="fas fa-home"></i>خانه</a></li>
+        <li><a id='cart' href="#"><i class="fas fa-shopping-cart"></i> سبد خرید</a></li>
+        <li><a id='his' href="#"><i class="fas fa-history"></i> سوابق خرید</a></li>
         {% if user.is_authenticated %}
             <li><i class="fas fa-user"></i>     {{user}} </a></li>
             <li><i class="fa-solid fa-arrow-right-from-bracket"><form method="post" action="{% url 'logout' %}">
@@ -29,7 +29,7 @@
                 <button class="navbar" type="submit">خروج</button>
             </form></i>
         {% else %}
-            <li><a href="{% url 'login' %}"><i class="fas fa-user"></i> ورود به حساب کاربری</a></li>
+            <li><a id='enter-ac' href="{% url 'login' %}"><i class="fas fa-user"></i> ورود به حساب کاربری</a></li>
         {% endif %}
     </ul>
 </div>

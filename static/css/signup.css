@@ -1,3 +1,13 @@
+@font-face {
+    font-family: Vazirmatn;
+    src: url(../fonts/fonts/ttf/Vazirmatn-Medium.ttf) format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+*{
+    font-family: Vazirmatn;
+} 
 body {
     margin: 0;
     padding: 0;
@@ -7,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    direction: rtl; /* Set the direction to RTL */
+    direction: rtl; 
 }
 
 .signup-container {
@@ -19,15 +29,9 @@ body {
     width: 100%;
 }
 
-.signup-form h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
-    text-align: center; /* Center the header text */
-}
-
 .form-group {
     margin-bottom: 1.5rem;
-    text-align: right; /* Align text to the right */
+    text-align: right;
 }
 
 .form-group label {
@@ -43,7 +47,7 @@ body {
     padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    text-align: right; /* Align text inside inputs to the right */
+    text-align: right;
 }
 
 button {
@@ -60,4 +64,7 @@ button {
 
 button:hover {
     background: #c8b177;
+}
+#regis{
+    font-size:20px;
 }

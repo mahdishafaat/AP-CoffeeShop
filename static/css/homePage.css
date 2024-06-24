@@ -17,7 +17,7 @@ body {
 
 }
 .navbar {
-    position: fixed; /* Fixed position to follow scrolling */
+    position: fixed;
     top: 0;
     width: 100%;
     display: flex;
@@ -39,24 +39,41 @@ body {
     margin: 0 50px;
     position: relative;
 }
+.navbar ul li a:hover a{
+    color:black;
+}
 .navbar ul li a {
     color: white;
     text-decoration: none;
+    transition: color 0.3s ease;
+
 }
+
+
 .navbar ul li:hover .dropdown {
-    display: block;
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s;
+    transition: all 120ms ease-in 100ms;
+    transform: translateY(15px);
 }
+
 .navbar ul li a i {
     margin-left: 5px; 
 }
 .dropdown {
-    display: none;
+    visibility: hidden;
     position: absolute;
     top: 90%;
     left: 1;
     background-color: #59310b;
     min-width: 170px;
     z-index: 2;
+    box-shadow: -1px 1px 20px 3px #fbf7f73d;
+    margin-top:5px;
+    opacity:0;
+    transition: visibility 0s, opacity 0.5s;
+    transition: all 120ms ease-in 80ms;
 }
 .dropdown a {
     display: block;
@@ -145,3 +162,17 @@ a{
 #mostsale, #coldc, #hotc, #cake{
     font-family: Vazirmatn !important;
 }
+.navbar ul li a:hover {
+    color:#c3a282
+}
+
+
+#menu:hover #menu-svg{
+    transform:rotate(90deg);
+}
+#menu-svg{
+    transition: all 0.5s;
+    transform:rotate(0deg);
+}
+
+ 
