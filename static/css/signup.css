@@ -1,3 +1,13 @@
+@font-face {
+    font-family: Vazirmatn;
+    src: url(../fonts/fonts/ttf/Vazirmatn-Medium.ttf) format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+*{
+    font-family: Vazirmatn;
+} 
 body {
     margin: 0;
     padding: 0;
@@ -56,5 +66,5 @@ button:hover {
     background: #c8b177;
 }
 #regis{
-    font-size:large;
+    font-size:20px;
 }
