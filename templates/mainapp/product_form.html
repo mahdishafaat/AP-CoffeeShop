@@ -5,8 +5,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Create a New Product</h1>
-    <form method="POST">
+    <h1>افزودن محصول جدید</h1>
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-field">
             {{ form.name.label_tag }}
@@ -48,12 +48,11 @@
             {{ form.sugar.label_tag }}
             {{ form.sugar }}
         </div>
-
         <div class="form-field">
             {{ form.vertical.label_tag }}
             {{ form.vertical }}
         </div>
-        <input type="submit" value="Save">
+        <input type="submit" value="ذخیره">
     </form>
     
 
@@ -61,7 +60,7 @@
 
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'mainapp/create_product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_product.css' %}">
 
 
 </body>

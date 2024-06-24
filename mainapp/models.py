@@ -1,6 +1,8 @@
 from django.db import models
 from django.core import validators
 from members.models import Member
+from django.utils.translation import gettext as _
+
 
 
 class Storage(models.Model):
@@ -11,20 +13,20 @@ class Storage(models.Model):
     
   
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True, null=True)
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=2, validators=[validators.MinValueValidator(0)])
-    timeNeeded = models.IntegerField(default=0, validators=[validators.MaxValueValidator(60)])
-    coffee = models.PositiveBigIntegerField(default=0)
-    milk = models.PositiveBigIntegerField(default=0)
-    chocolate = models.PositiveBigIntegerField(default=0)
-    flour = models.PositiveBigIntegerField(default=0)
-    sugar = models.PositiveBigIntegerField(default=0)
-    image = models.ImageField(upload_to='products/')
+    name = models.CharField(_('نام'), max_length=255)
+    description = models.CharField( _("توضیحات"), max_length=255, blank=True, null=True)
+    price = models.DecimalField(_("قیمت"),default=0, max_digits=10, decimal_places=2, validators=[validators.MinValueValidator(0)])
+    timeNeeded = models.IntegerField(_("زمان مورد نیاز"),default=0, validators=[validators.MaxValueValidator(60)])
+    coffee = models.PositiveIntegerField(_("قهوه"),default=0)
+    milk = models.PositiveIntegerField(_("شیر"),default=0)
+    chocolate = models.PositiveIntegerField(_("شکلات"),default=0)
+    flour = models.PositiveIntegerField(_("آرد"),default=0)
+    sugar = models.PositiveIntegerField(_("شکر"),default=0)
+    image = models.ImageField(_("تصویر"),upload_to='products/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # raw_materials = models.ManyToManyField(Storage, through='ProductStorage')
-    vertical = models.BinaryField(auto_created=True, unique=True, blank=True, null=True)
+    # vertical = models.BinaryField(auto_created=True, unique=True, blank=True, null=True)
     sold_count = models.PositiveBigIntegerField(default=0)
 
     def __str__(self):

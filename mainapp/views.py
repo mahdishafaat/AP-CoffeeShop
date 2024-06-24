@@ -16,5 +16,18 @@ class StaffRequiredMixin(UserPassesTestMixin):
 
 class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Product
+    fields = [
+        'name', 'description', 'price', 'timeNeeded', 'coffee', 'milk', 
+        'chocolate', 'flour', 'sugar', 'image'
+    ]
     success_url = reverse_lazy('index')
-    fields="__all__"
+
+    def form_valid(self, form):
+        print("Form is valid")
+        return super().form_valid(form)
+
+
+    def form_invalid(self, form):
+        print("Form is invalid")
+        print(form.errors.as_data())  # Print the errors to console
+        return super().form_invalid(form)
