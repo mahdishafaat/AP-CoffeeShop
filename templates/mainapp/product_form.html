@@ -1,14 +1,12 @@
-{% comment %} <html lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'mainapp/create_product.css' %}">
     <title>Document</title>
 </head>
 <body>
     <h1>Create a New Product</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="POST">
         {% csrf_token %}
         <div class="form-field">
             {{ form.name.label_tag }}
@@ -31,18 +29,46 @@
             {{ form.image }}
         </div>
         <div class="form-field">
+            {{ form.coffee.label_tag }}
+            {{ form.coffee }}
+        </div>
+        <div class="form-field">
+            {{ form.milk.label_tag }}
+            {{ form.milk }}
+        </div>
+        <div class="form-field">
+            {{ form.chocolate.label_tag }}
+            {{ form.chocolate }}
+        </div>
+        <div class="form-field">
+            {{ form.flour.label_tag }}
+            {{ form.flour }}
+        </div>
+        <div class="form-field">
+            {{ form.sugar.label_tag }}
+            {{ form.sugar }}
+        </div>
+
+        <div class="form-field">
             {{ form.vertical.label_tag }}
             {{ form.vertical }}
         </div>
         <input type="submit" value="Save">
     </form>
     
+
+
+
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'mainapp/create_product.css' %}">
+
+
 </body>
 </html>
 
- {% endcomment %}
 
-<html lang="en">
+{% comment %} <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,4 +81,4 @@
         <input type="submit", value="submit" >
     </form>
 </body>
-</html>
+</html> {% endcomment %}
