@@ -29,8 +29,12 @@ body {
     width: 100%;
 }
 
+#regis {
+    text-align: center;
+    color: #6a3803;
+}
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: right;
 }
 
@@ -43,7 +47,7 @@ body {
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
-    width: 100%;
+    width: 95%;
     padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -68,3 +72,22 @@ button:hover {
 #regis{
     font-size:20px;
 }
+.login {
+    text-align: center;
+    margin-top: 1rem;
+}
+.login p {
+    margin: 0;
+    color: #555;
+}
+.login a {
+    color: #713005;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.login a:hover {
+    color: #c8b177;
+}
+
