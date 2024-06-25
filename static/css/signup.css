@@ -8,6 +8,9 @@
 *{
     font-family: Vazirmatn;
 } 
+p{
+    color: #e6ddd4;
+}
 body {
     margin: 0;
     padding: 0;
@@ -21,17 +24,43 @@ body {
 }
 
 .signup-container {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.06);
+    z-index:2;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
+    backdrop-filter:blur(6px);
+    box-shadow: -1px 1px 20px 0 black;
 }
 
 #regis {
+    display: inline-block;
+    font-size: 30px;
+    position: relative;
     text-align: center;
-    color: #6a3803;
+    color:#472107;
+    left : -44%;
+}
+#regis::before,
+#regis::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 297%;
+  height: 1px;
+  background-color: #c8b177;
+}
+
+#regis::before {
+  right: 100%;
+  margin-right: 10px;
+}
+
+#regis::after {
+  left: 100%;
+  margin-left: 10px;
 }
 .form-group {
     margin-bottom: 1rem;
@@ -41,7 +70,7 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #e6ddd4;
 }
 
 .form-group input[type="text"],
@@ -64,6 +93,7 @@ button {
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-top:5px;
 }
 
 button:hover {
@@ -89,5 +119,31 @@ button:hover {
 
 .login a:hover {
     color: #c8b177;
+}
+.circle{
+    width:200px;
+    height:200px;
+    border-radius:100%;
+}
+#cir1{
+    background-image:linear-gradient(#ebe6dc, rgb(87, 59, 16));
+    margin-top: -128px;
+    margin-left:-500px;
+    position:absolute
+}
+#cir2{
+    background-image:linear-gradient( to right, #231d1d, rgb(225, 154, 22));
+    margin-top:-673px;
+    margin-left: 451px;
+    position: absolute;
+}
+#cir3{
+    background-image:linear-gradient( to right, #e0ffc5, rgb(52, 33, 0));
+    margin-top:714px;
+    margin-left: 154px;
+    position: absolute;
+}
+.helptext {
+    color: #472107
 }
 
