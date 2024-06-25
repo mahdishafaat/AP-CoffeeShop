@@ -38,7 +38,7 @@ body {
 .login-form h2 {
     margin-bottom: 1.5rem;
     color: #333;
-    text-align: center; /* Center the header text */
+    text-align: center; 
 }
 
 .form-group {
@@ -59,12 +59,22 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-input [type="text"]{
-    color: black;
-}
+
 .form-group input[type="checkbox"] {
     display: inline-block;
     width: auto;
+}
+.form-group input[type="text"]{
+    text-align: left;
+    direction: ltr;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.form-group input[type="password"]{
+    text-align: left;
+    direction: ltr;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 .form-group label[for="remember-me"] {
@@ -74,9 +84,16 @@ input [type="text"]{
 }
 .form-group label[for="password"]{
     margin-right:0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color:#472107
 }
 .form-group label[for="username"]{
     margin-right:0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color:#472107
+
 }
 button {
     width: 100%;
