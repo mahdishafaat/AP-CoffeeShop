@@ -6,6 +6,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 def homepage(request):
     return render(request, 'index/index.html', {})
 
+def store_view(request):
+    all_products = Product.objects.all()
+    context={'products':all_products}
+    return render(request,'mainapp/store.html',context=context)
+
+
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
