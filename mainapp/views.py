@@ -4,7 +4,11 @@ from mainapp.models import Product
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 def homepage(request):
-    return render(request, 'index/index.html', {})
+    top_selling_products = Product.objects.order_by('-sold_count')[:12]
+    context = {
+        'products': top_selling_products
+    }
+    return render(request, 'index/index.html',context=context)
 
 def store_view(request):
     all_products = Product.objects.all()

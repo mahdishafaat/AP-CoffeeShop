@@ -48,19 +48,9 @@
                 </div>
                 {% endif %}
             {% endfor %}
-        {% else %}
-            {% for product in products %}
-            <div class="product-card">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.price }} تومان</p>
-                <p>{{ product.description }}</p>
-            </div>
-            {% endfor %}
         {% endif %}
     </div>
 </body>
-
 {% endblock content %}
 </html>
 
