@@ -47,10 +47,9 @@ h1 {
 }
 
 .product-card {
-    /* سایر استایل‌ها... */
-    transition: transform 0.2s; /* انیمیشن تغییر اندازه */
+    transition: transform 0.2s; 
 }
 
 .product-card:hover {
-    transform: scale(1.05); /* تغییر اندازه به 1.05 برابر وقتی که روی آن هاور می کنیم */
+    transform: scale(1.05); 
 }
