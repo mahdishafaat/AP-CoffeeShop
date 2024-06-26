@@ -1,13 +1,18 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فروشگاه</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
+    {% block content %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/store.css' %}">
+
     <h1>محصولات</h1>
     <div class="product-container">
         {% if request.GET.category == "cold_drinks" %}
@@ -43,17 +48,9 @@
                 </div>
                 {% endif %}
             {% endfor %}
-        {% else %}
-            {% for product in products %}
-            <div class="product-card">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.price }} تومان</p>
-                <p>{{ product.description }}</p>
-            </div>
-            {% endfor %}
         {% endif %}
     </div>
 </body>
+{% endblock content %}
 </html>
 
