@@ -1,13 +1,18 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فروشگاه</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
+    {% block content %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <h1>محصولات</h1>
     <div class="product-container">
         {% if request.GET.category == "cold_drinks" %}
@@ -55,5 +60,7 @@
         {% endif %}
     </div>
 </body>
+
+{% endblock content %}
 </html>
 

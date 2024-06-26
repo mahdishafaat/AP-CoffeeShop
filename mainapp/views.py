@@ -18,7 +18,7 @@ class StaffRequiredMixin(UserPassesTestMixin):
         return self.request.user.groups.filter(name='Staff').exists()
 
     def handle_no_permission(self):
-        return HttpResponse("You do not have permission to view this page")
+        return HttpResponse("You do not have permission to view this page <br><a href='http://127.0.0.1:8000/accounts/login'>login</a>")
 
 class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Product

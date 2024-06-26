@@ -30,3 +30,8 @@ class MemberChangeForm(UserChangeForm):
         model = Member
         fields = UserChangeForm.Meta.fields
 
+class PasswordResetForm(forms.Form):
+    username = forms.CharField(label=_("نام کاربری یا ایمیل"),max_length=150)
+    first_name = forms.CharField(label=_("نام"),max_length=30)
+    phone_number = forms.CharField(label=_("شماره همراه"),max_length=15)
+    new_password = forms.CharField(label=_("رمز عبور جدید"),widget=forms.PasswordInput)
