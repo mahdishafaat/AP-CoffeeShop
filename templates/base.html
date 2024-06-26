@@ -24,6 +24,10 @@
             <li><a id='cart' href="#"><i class="fas fa-shopping-cart"></i> سبد خرید</a></li>
             <li><a id='his' href="#"><i class="fas fa-history"></i> سوابق خرید</a></li>
             {% if user.is_authenticated %}
+                <li><a id='enter-ac' href="{% url 'login' %}"><i class="fa-solid fa-gear"></i>پنل مدیریت</a></li>
+            {% endif %}
+
+            {% if user.is_authenticated %}
                 <li><i class="fas fa-user"></i> {{user}} </a></li>
                 <li>
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
