@@ -1,6 +1,14 @@
-/* General styles for the body */
+@font-face {
+    font-family: Vazirmatn;
+    src: url(../fonts/fonts/ttf/Vazirmatn-Medium.ttf) format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  *{
+    font-family: Vazirmatn;
+} 
 body {
-    font-family: 'Arial', sans-serif;
     background: linear-gradient(225deg, #5b3006,#ff8b2d);
     margin: 0;
     padding: 0;
@@ -10,7 +18,7 @@ body {
     height: 100vh;
 }
 
-/* Container for the form */
+
 form {
     background-color: #ffffff;
     border-radius: 8px;
@@ -21,7 +29,7 @@ form {
     margin: 20px;
 }
 
-/* Heading */
+
 h1 {
     text-align: center;
     color: #fefefe;
@@ -29,7 +37,7 @@ h1 {
     font-size: 60px;
 }
 
-/* Style for form fields */
+
 .form-field {
     margin-bottom: 15px;
 }
@@ -62,7 +70,7 @@ h1 {
     outline: none;
 }
 
-/* Style for submit button */
+
 input[type="submit"] {
     width: 100%;
     padding: 10px 0;
@@ -79,7 +87,7 @@ input[type="submit"]:hover {
     background-color: #45a049;
 }
 
-/* Adding responsiveness */
+
 @media (max-width: 600px) {
     form {
         padding: 15px;
@@ -89,4 +97,7 @@ input[type="submit"]:hover {
         padding: 8px 0;
         font-size: 16px;
     }
+}
+img{
+    border-radius: 100%;
 }
