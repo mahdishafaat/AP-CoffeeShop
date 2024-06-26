@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import CreateView
-from mainapp.models import Product
+from mainapp.models import Product, Order
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
+
 def homepage(request):
     top_selling_products = Product.objects.order_by('-sold_count')[:12]
     context = {
@@ -41,3 +43,32 @@ class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         print("Form is invalid")
         print(form.errors.as_data())  # Print the errors to console
         return super().form_invalid(form)
+
+
+def is_staff(user):
+    return user.is_staff
+
+# @user_passes_test(is_staff)
+
+
+def management_panel(request):
+    product_sales = (
+        Order.objects.values('products__name', 'products__category')
+        .annotate(count=Count('products'))
+        .order_by('products__category', 'products__name')
+    )
+    
+    chart_data = {}
+    for sale in product_sales:
+        category = sale['products__category']
+        product = sale['products__name']
+        count = sale['count']
+        if category not in chart_data:
+            chart_data[category] = []
+        chart_data[category].append({'product': product, 'count': count})
+
+    context = {
+        'chart_data': chart_data
+    }
+
+    return render(request, 'mainapp/management_panel.html', context)

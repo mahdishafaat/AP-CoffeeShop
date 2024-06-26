@@ -23,8 +23,8 @@
             <li><a id='home-button' href='{% url "index" %}'><i class="fas fa-home"></i>خانه</a></li>
             <li><a id='cart' href="#"><i class="fas fa-shopping-cart"></i> سبد خرید</a></li>
             <li><a id='his' href="#"><i class="fas fa-history"></i> سوابق خرید</a></li>
-            {% if user.is_authenticated %}
-                <li><a id='enter-ac' href="{% url 'login' %}"><i class="fa-solid fa-gear"></i>پنل مدیریت</a></li>
+            {% if user.is_authenticated and user.is_staff %}
+                <li><a id='enter-ac' href="{% url 'management_panel' %}"><i class="fa-solid fa-gear"></i>پنل مدیریت</a></li>
             {% endif %}
 
             {% if user.is_authenticated %}
