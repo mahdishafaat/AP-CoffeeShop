@@ -39,7 +39,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class ProductStorage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     raw_materials = models.ForeignKey(Storage, on_delete=models.CASCADE)
@@ -57,6 +58,7 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -89,6 +91,7 @@ class OrderProduct(models.Model):
             storage = Storage.objects.get(name=material)
             storage.stock -= quantity
             storage.save()    
+
 
 class CustomerOrder(models.Model):
     customer = models.ForeignKey(Member, on_delete=models.CASCADE)
