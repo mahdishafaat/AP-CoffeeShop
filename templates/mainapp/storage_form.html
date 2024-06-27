@@ -1,0 +1,22 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/update_storage.css' %}">
+</head>
+<body>
+    <h1>Update Storage Form</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.name.label_tag}}
+        {{form.name}}
+        <br>
+        {{form.stock.label_tag}}
+        {{form.stock}}
+        <br>
+        <input type="submit" value="update">
+    </form>
+
+</body>
+</html>

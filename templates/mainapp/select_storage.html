@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Storage to Update</title>
+    <link rel="stylesheet" href="{% static 'css/select_storage.css'%}">
+</head>
+<body>
+    <h1>Select Storage to Update</h1>
+    <form>
+        <select name="storage" id="storageSelect">
+            <option value="">Select a Storage</option>
+            {% for storage in storages %}
+                <option value="{{ storage.pk }}">{{ storage.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" onclick="redirectToUpdate()">Go</button>
+    </form>
+
+    <script>
+        function redirectToUpdate() {
+            var select = document.getElementById("storageSelect");
+            var pk = select.options[select.selectedIndex].value;
+            if (pk) {
+                window.location.href = "{% url 'update_storage' 0 %}".replace('0', pk);
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
-from django.views.generic import CreateView
-from mainapp.models import Product, Order
+from django.views.generic import CreateView,UpdateView
+from mainapp.models import Product, Order,Storage
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count
@@ -44,6 +44,15 @@ class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         print(form.errors.as_data())  # Print the errors to console
         return super().form_invalid(form)
 
+def select_storage_view(request):
+    storages = Storage.objects.all()
+    return render(request, 'mainapp/select_storage.html', {'storages': storages})
+
+
+class StorageUpdateView(UpdateView):
+    model=Storage
+    fields="__all__"
+    success_url = reverse_lazy('index')
 
 def is_staff(user):
     return user.is_staff
