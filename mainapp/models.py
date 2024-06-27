@@ -1,5 +1,6 @@
-from django.db import models
+from django.db import models, transaction
 from django.core import validators
+from django.core.exceptions import ValidationError
 from members.models import Member
 from django.utils.translation import gettext as _
 
@@ -38,7 +39,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class ProductStorage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     raw_materials = models.ForeignKey(Storage, on_delete=models.CASCADE)
@@ -52,9 +54,9 @@ class Order(models.Model):
     customer = models.ForeignKey(Member, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
     order_date = models.DateTimeField(auto_now_add=True)
-    Type = models.BinaryField(blank=True, null=True) 
+    Type = models.BinaryField(blank=True, null=True)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return str(self.pk)
 
 
@@ -65,6 +67,31 @@ class OrderProduct(models.Model):
 
     def __str__(self) -> str:
         return f"{self.quantity} of {self.product.name} for {self.order.customer}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Call the parent's save method
+        self.update_storage()
+
+    def update_storage(self):
+        product = self.product
+        material_quantities = {
+            'coffee': 0,
+            'milk': 0,
+            'chocolate': 0,
+            'flour': 0,
+            'sugar': 0,
+        }
+        material_quantities['coffee'] += product.coffee * self.quantity
+        material_quantities['milk'] += product.milk * self.quantity
+        material_quantities['chocolate'] += product.chocolate * self.quantity
+        material_quantities['flour'] += product.flour * self.quantity
+        material_quantities['sugar'] += product.sugar * self.quantity
+
+        for material, quantity in material_quantities.items():
+            storage = Storage.objects.get(name=material)
+            storage.stock -= quantity
+            storage.save()    
+
 
 class CustomerOrder(models.Model):
     customer = models.ForeignKey(Member, on_delete=models.CASCADE)

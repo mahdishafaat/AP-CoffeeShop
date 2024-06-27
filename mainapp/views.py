@@ -49,8 +49,6 @@ def is_staff(user):
     return user.is_staff
 
 # @user_passes_test(is_staff)
-
-
 def management_panel(request):
     product_sales = (
         Order.objects.values('products__name', 'products__category')
