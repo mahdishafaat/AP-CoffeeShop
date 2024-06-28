@@ -1,6 +1,5 @@
-from django.db import models, transaction
+from django.db import models
 from django.core import validators
-from django.core.exceptions import ValidationError
 from members.models import Member
 from django.utils.translation import gettext as _
 
@@ -69,7 +68,7 @@ class OrderProduct(models.Model):
         return f"{self.quantity} of {self.product.name} for {self.order.customer}"
     
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)  # Call the parent's save method
+        super().save(*args, **kwargs)
         self.update_storage()
 
     def update_storage(self):

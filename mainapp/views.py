@@ -41,7 +41,7 @@ class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
 
     def form_invalid(self, form):
         print("Form is invalid")
-        print(form.errors.as_data())  # Print the errors to console
+        print(form.errors.as_data())
         return super().form_invalid(form)
 
 def select_storage_view(request):
