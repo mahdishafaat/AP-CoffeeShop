@@ -3,21 +3,37 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>انبارداری</title>
     <link rel="stylesheet" href="{% static 'css/update_storage.css' %}">
 </head>
 <body>
-    <h1>Update Storage Form</h1>
+<div class="content">
+    <h1>بروزرسانی انبار</h1>
     <form action="" method="POST">
         {% csrf_token %}
-        {{form.name.label_tag}}
+        <span>ماده اولیه</span>
         {{form.name}}
         <br>
-        {{form.stock.label_tag}}
+        <span>میزان موجود در انبار</span>
         {{form.stock}}
         <br>
-        <input type="submit" value="update">
+        <input type="submit" value="بروزرسانی">
     </form>
+</div>
+<script>
+    var formNameValue = "{{ form.name.value }}"; 
+    if (formNameValue === "شکر") { 
+        document.body.style.backgroundImage = "url('{% static "images/sugar.avif" %}')"; 
+    } else if (formNameValue === "شیر") { 
+        document.body.style.backgroundImage = "url('{% static "images/milk.jpg" %}')"; 
+    } else if (formNameValue === "قهوه") { 
+        document.body.style.backgroundImage = "url('{% static "images/coffee.avif" %}')"; 
+    } else if (formNameValue === "شکلات") { 
+        document.body.style.backgroundImage = "url('{% static "images/chocolate.avif" %}')"; 
+    } else if (formNameValue === "آرد") { 
+        document.body.style.backgroundImage = "url('{% static "images/flour.avif" %}')"; 
+    }
+</script>
 
 </body>
 </html>

@@ -13,11 +13,12 @@ body {
     background-image: linear-gradient(to left, rgba(255, 255, 255, 0.3),black), url('../images/coffee-storage-bg-image.jpg');
     background-position: center;
     position: relative;
-    background-size:cover;
+    background-size:100% 100%;
     display: flex; 
     justify-content: center;
     align-items: center;
-    min-height: 90vh
+    min-height: 90vh;
+    background-repeat: no-repeat;
   }
   
 .content {
