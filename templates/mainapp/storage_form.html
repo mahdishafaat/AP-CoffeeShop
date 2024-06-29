@@ -11,15 +11,19 @@
     <h1>بروزرسانی انبار</h1>
     <form action="" method="POST">
         {% csrf_token %}
-        <span>ماده اولیه</span>
-        {{form.name}}
-        <br>
-        <span>میزان موجود در انبار</span>
-        {{form.stock}}
-        <br>
+        <div class="sub">
+            {{form.stock}}
+            <span>:میزان موجود در انبار</span>
+            <br>
+        </div>
+        <div class="sub">
+            {{form.name}}
+            <span id="span1">:ماده اولیه</span>
+            <br>
+        </div>
+</div>
         <input type="submit" value="بروزرسانی">
     </form>
-</div>
 <script>
     var formNameValue = "{{ form.name.value }}"; 
     if (formNameValue === "شکر") { 
