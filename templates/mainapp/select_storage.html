@@ -4,21 +4,22 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Storage to Update</title>
+    <title>انبارداری</title>
     <link rel="stylesheet" href="{% static 'css/select_storage.css'%}">
 </head>
 <body>
-    <h1>Select Storage to Update</h1>
+<div class="content">
+    <h1>ماده‌ اولیه‌ی مورد نظر را جهت بروزرسانی انبار انتخاب کنید</h1>
     <form>
         <select name="storage" id="storageSelect">
-            <option value="">Select a Storage</option>
+            <option value="">انتخاب کنید</option>
             {% for storage in storages %}
                 <option value="{{ storage.pk }}">{{ storage.name }}</option>
             {% endfor %}
         </select>
-        <button type="button" onclick="redirectToUpdate()">Go</button>
+        <button type="button" onclick="redirectToUpdate()">تایید</button>
     </form>
-
+</div>  
     <script>
         function redirectToUpdate() {
             var select = document.getElementById("storageSelect");
@@ -30,4 +31,3 @@
     </script>
 </body>
 </html>
-
