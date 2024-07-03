@@ -11,37 +11,40 @@
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/store.css' %}">
-     
+
     <h1>محصولات</h1>
     <div class="product-container">
         {% for item in products_with_availability %}
-            {% if request.GET.category == item.product.category %}
+            {% if not request.GET.category or request.GET.category == item.product.category %}
                 <div class="product-card">
                     <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                     <h3>{{ item.product.name }}</h3>
                     <p>{{ item.product.price }} تومان</p>
                     <p>{{ item.product.description }}</p>
-                    {% if item.is_available %}
-                    <div class="add-to-cart-btn">
-                        <form action="{% url 'add_to_cart' item.product.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">افزودن به سبد خرید</button>
-                        </form>
-                    </div>
-                    {% else %}
-                        <p>مواد اولیه کافی نیست</p>
+                    {% if not request.GET.from_admin %}
+                        {% if item.is_available %}
+                            <div class="add-to-cart-btn">
+                                <form action="{% url 'add_to_cart' item.product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">افزودن به سبد خرید</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <p>مواد اولیه کافی نیست</p>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% endif %}
         {% endfor %}
     </div>
-   <style>.product-card img {
-    border-radius: 10px;
-    width: 100%;
-    height: 200px; /* تنظیم ارتفاع ثابت برای تصاویر */
-    object-fit: cover;
-}
-</style>
+   <style>
+   .product-card img {
+       border-radius: 10px;
+       width: 100%;
+       height: 200px; /* تنظیم ارتفاع ثابت برای تصاویر */
+       object-fit: cover;
+   }
+   </style>
 </body>
 </html>
 {% endblock content %}
