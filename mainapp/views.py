@@ -10,7 +10,7 @@ from datetime import timedelta
 from collections import defaultdict
 
 def homepage(request):
-    top_selling_products = Product.objects.order_by('-sold_count')[:12]
+    top_selling_products = Product.objects.annotate(total_sold=Sum('orderproduct__quantity')).order_by('-total_sold')[:12]
     context = {
         'products': top_selling_products
     }
