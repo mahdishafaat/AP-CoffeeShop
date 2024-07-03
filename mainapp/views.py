@@ -3,7 +3,7 @@ from django.views.generic import CreateView,UpdateView
 from mainapp.models import Product, Order,Storage
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 def homepage(request):
     top_selling_products = Product.objects.order_by('-sold_count')[:12]
@@ -59,23 +59,21 @@ def is_staff(user):
 
 # @user_passes_test(is_staff)
 def management_panel(request):
-    product_sales = (
-        Order.objects.values('products__name', 'products__category')
-        .annotate(count=Count('products'))
-        .order_by('products__category', 'products__name')
-    )
-    
-    chart_data = {}
-    for sale in product_sales:
-        category = sale['products__category']
-        product = sale['products__name']
-        count = sale['count']
-        if category not in chart_data:
-            chart_data[category] = []
-        chart_data[category].append({'product': product, 'count': count})
-
-    context = {
-        'chart_data': chart_data
+    categories = {
+        'hot_drinks': 'نوشیدنی گرم',
+        'cold_drinks': 'نوشیدنی سرد',
+        'cakes': 'کیک',
     }
 
+    sales_data = {}
+    for category, category_name in categories.items():
+        products = Product.objects.filter(category=category).annotate(total_sales=Sum('orderproduct__quantity'))
+        sales_data[category_name] = {
+            'labels': list(products.values_list('name', flat=True)),
+            'data': [sale if sale is not None else 0 for sale in products.values_list('total_sales', flat=True)]
+        }
+
+    context = {
+        'sales_data': sales_data
+    }    
     return render(request, 'mainapp/management_panel.html', context)

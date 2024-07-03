@@ -1,55 +1,43 @@
-<!-- coffee/templates/coffee/management_panel.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Panel</title>
-    {% load static %}
+    <title>Sales Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Product Sales</h1>
-    <pre>{{ chart_data|safe }}</pre>
-    {% for category, products in chart_data.items %}
-        <h2>{{ category }}</h2>
-        <canvas id="chart-{{ category }}"></canvas>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var ctx = document.getElementById('chart-{{ category }}').getContext('2d');
-                var data = {{ products|safe|escapejs }};
-
-                console.log('Data for {{ category }}:', data);
-
-                var productLabels = data.map(obj => obj.product);
-                var productCounts = data.map(obj => obj.count);
-
-                console.log('Product Labels for {{ category }}:', productLabels);
-                console.log('Product Counts for {{ category }}:', productCounts);
-
-                var chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: productLabels,
-                        datasets: [{
-                            label: 'Sales',
-                            data: productCounts,
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+    <h1>نمودار فروش</h1>
+    <div>
+        {% for category, data in sales_data.items %}
+            <h2>{{ category }}</h2>
+            <canvas id="chart-{{ forloop.counter }}" width="400" height="200"></canvas>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+                    const chart{{ forloop.counter }} = new Chart(ctx{{ forloop.counter }}, {
+                        type: 'bar',
+                        data: {
+                            labels: {{ data.labels|safe }},
+                            datasets: [{
+                                label: 'Sales',
+                                data: {{ data.data|safe }},
+                                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                                borderColor: 'rgba(0, 0, 0, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
+                    });
                 });
-            });
-        </script>
-    {% endfor %}
+            </script>
+        {% endfor %}
+    </div>
 </body>
 </html>

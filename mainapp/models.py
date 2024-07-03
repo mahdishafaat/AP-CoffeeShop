@@ -74,17 +74,17 @@ class OrderProduct(models.Model):
     def update_storage(self):
         product = self.product
         material_quantities = {
-            'coffee': 0,
-            'milk': 0,
-            'chocolate': 0,
-            'flour': 0,
-            'sugar': 0,
+            'قهوه': 0,
+            'شیر': 0,
+            'شکلات': 0,
+            'آرد': 0,
+            'شکر': 0,
         }
-        material_quantities['coffee'] += product.coffee * self.quantity
-        material_quantities['milk'] += product.milk * self.quantity
-        material_quantities['chocolate'] += product.chocolate * self.quantity
-        material_quantities['flour'] += product.flour * self.quantity
-        material_quantities['sugar'] += product.sugar * self.quantity
+        material_quantities['قهوه'] += product.coffee * self.quantity
+        material_quantities['شیر'] += product.milk * self.quantity
+        material_quantities['شکلات'] += product.chocolate * self.quantity
+        material_quantities['آرد'] += product.flour * self.quantity
+        material_quantities['شکر'] += product.sugar * self.quantity
 
         for material, quantity in material_quantities.items():
             storage = Storage.objects.get(name=material)
