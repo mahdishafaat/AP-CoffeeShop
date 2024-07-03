@@ -65,7 +65,7 @@ def view_cart(request):
     if not order or not order.orderproduct_set.exists():
         context = {'empty_cart': True}
     else:
-        order_products = OrderProduct.objects.filter(order=order)
+        order_products = order.orderproduct_set.all()
         total_cost = sum([op.product.price * op.quantity for op in order_products])
         context = {
             'order_products': order_products,
@@ -73,7 +73,6 @@ def view_cart(request):
             'total_cost': total_cost,
         }
     return render(request, 'mainapp/cart.html', context)
-
 @login_required
 def finalize_order(request):
     order = Order.objects.filter(customer=request.user, is_finalized=False).first()
@@ -93,7 +92,7 @@ def order_history(request):
     order_data = []
 
     for order in orders:
-        order_products = OrderProduct.objects.filter(order=order)
+        order_products = order.orderproduct_set.all()
         products_info = []
 
         for order_product in order_products:
@@ -118,6 +117,21 @@ def order_history(request):
     }
 
     return render(request, 'mainapp/order_history.html', context)
+
+@login_required
+def remove_from_cart(request, product_id):
+    order_product = get_object_or_404(OrderProduct, product_id=product_id, order__customer=request.user, order__is_finalized=False)
+    order_product.delete()
+    return redirect('view_cart')
+@login_required
+def update_quantity(request, product_id):
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        order_product = get_object_or_404(OrderProduct, product_id=product_id, order__customer=request.user, order__is_finalized=False)
+        if quantity > 0:
+            order_product.quantity = quantity
+            order_product.save()
+    return redirect('view_cart')
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Staff').exists()

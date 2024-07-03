@@ -1,116 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: url('{% static "images/cart_background.jpg" %}') no-repeat center center fixed;
-        background-size: cover;
-        color: #333;
-    }
-
-    .cart-container {
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
-        padding: 20px;
-        margin: 60px auto; /* فاصله بیشتر از بالای صفحه */
-        max-width: 800px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .cart-items {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .cart-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        width: 100%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
-    }
-
-    .cart-item img {
-        width: 100px;
-        height: 100px;
-        margin-right: 20px;
-        border-radius: 5px;
-    }
-
-    .cart-item p {
-        margin: 0;
-        padding: 0 10px;
-    }
-
-    .empty-cart-message {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-        margin: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
-    }
-
-    .total-cost {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
-        width: 100%;
-    }
-
-    button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<h1>سبد خرید</h1>
 <div class="cart-container">
-    <h1>سبد خرید</h1>
-    {% if empty_cart %}
-        <div class="empty-cart-message">
-            <p>محصولی در سبد خرید شما وجود ندارد</p>
-        </div>
-    {% else %}
+    {% if not empty_cart %}
         <div class="cart-items">
             {% for order_product in order_products %}
-            <div class="cart-item">
-                <img src="{{ order_product.product.image.url }}" alt="{{ order_product.product.name }}">
-                <p>{{ order_product.product.name }}</p>
-                <p>تعداد: {{ order_product.quantity }}</p>
-                <p>قیمت واحد: {{ order_product.product.price }} تومان</p>
-            </div>
+                <div class="cart-item">
+                    <img src="{{ order_product.product.image.url }}" alt="{{ order_product.product.name }}">
+                    <div class="product-details">
+                        <p>{{ order_product.product.name }}</p>
+                        <p>قیمت واحد: {{ order_product.product.price }} تومان</p>
+                        <form action="{% url 'update_quantity' order_product.product.id %}" method="post" class="quantity-form">
+                            {% csrf_token %}
+                            <label for="quantity-{{ order_product.product.id }}">تعداد: </label>
+                            <input type="number" name="quantity" id="quantity-{{ order_product.product.id }}" value="{{ order_product.quantity }}" min="1" class="quantity-input">
+                        </form>
+                    </div>
+                    <a href="{% url 'remove_from_cart' order_product.product.id %}" class="remove-btn">حذف</a>
+                </div>
             {% endfor %}
         </div>
-        <div class="total-cost">
-            <p>هزینه کل: {{ total_cost }} تومان</p>
-        </div>
-        <form action="{% url 'finalize_order' %}" method="post" style="text-align: center;">
+        <p class="total-cost">هزینه کل: {{ total_cost }} تومان</p>
+        <form action="{% url 'finalize_order' %}" method="post" class="finalize-order-form">
             {% csrf_token %}
             <button type="submit">نهایی کردن خرید</button>
         </form>
+    {% else %}
+        <p class="empty-cart-message">محصولی در سبد خرید شما وجود ندارد.</p>
     {% endif %}
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                this.form.submit();
+            });
+        });
+    });
+</script>
 {% endblock %}

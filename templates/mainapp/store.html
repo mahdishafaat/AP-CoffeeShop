@@ -11,7 +11,7 @@
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/store.css' %}">
-
+     
     <h1>محصولات</h1>
     <div class="product-container">
         {% for item in products_with_availability %}
@@ -35,7 +35,13 @@
             {% endif %}
         {% endfor %}
     </div>
-   
+   <style>.product-card img {
+    border-radius: 10px;
+    width: 100%;
+    height: 200px; /* تنظیم ارتفاع ثابت برای تصاویر */
+    object-fit: cover;
+}
+</style>
 </body>
 </html>
 {% endblock content %}
