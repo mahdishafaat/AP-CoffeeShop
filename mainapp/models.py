@@ -17,7 +17,7 @@ class Product(models.Model):
         ('hot_drinks', 'نوشیدنی گرم'),
         ('cold_drinks', 'نوشیدنی سرد'),
         ('cakes', 'کیک'),
-        ('special_products','محصولات خاص')
+        ('breakfast','صبحانه')
     ]
 
     category = models.CharField(_("دسته بندی محصول"),max_length=20, choices=CATEGORY_CHOICES, default='hot_drinks')
@@ -30,6 +30,8 @@ class Product(models.Model):
     chocolate = models.PositiveIntegerField(_("شکلات"),default=0)
     flour = models.PositiveIntegerField(_("آرد"),default=0)
     sugar = models.PositiveIntegerField(_("شکر"),default=0)
+    egg = models.PositiveIntegerField(_("تخم مرغ"),default=0)
+    bread = models.PositiveIntegerField(_("نان"),default=0)
     image = models.ImageField(_("تصویر"),upload_to='products/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -80,6 +82,8 @@ class OrderProduct(models.Model):
             'شکلات': product.chocolate * self.quantity,
             'آرد': product.flour * self.quantity,
             'شکر': product.sugar * self.quantity,
+            'تخم مرغ': product.egg * self.quantity,
+            'نان': product.bread * self.quantity
         }
 
         for material, quantity in material_quantities.items():

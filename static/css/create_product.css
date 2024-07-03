@@ -1,104 +1,77 @@
-@font-face {
-    font-family: Vazirmatn;
-    src: url(../fonts/fonts/ttf/Vazirmatn-Medium.ttf) format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-  }
-  *{
-    font-family: Vazirmatn;
-} 
 body {
-    background: linear-gradient(225deg, #5b3006,#ff8b2d);
+    font-family: 'Arial', sans-serif;
+    background-color: #8f5702;
+    color: #333;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
-
-form {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: rgb(225, 212, 194);
     padding: 20px;
-    width: 100%;
-    max-width: 500px;
-    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
-
 
 h1 {
     text-align: center;
-    color: #fefefe;
-    margin-bottom: 20px;
-    font-size: 60px;
+    color: #925c0b;
 }
 
-
-.form-field {
+.product-form .form-field {
     margin-bottom: 15px;
 }
 
-.form-field label {
+.product-form label {
     display: block;
-    margin-bottom: 5px;
     font-weight: bold;
-    color: #555555;
+    margin-bottom: 5px;
 }
 
-.form-field input[type="text"],
-.form-field input[type="number"],
-.form-field input[type="file"],
-.form-field select {
+.product-form input[type="text"],
+.product-form input[type="number"],
+.product-form input[type="file"],
+.product-form select,
+.product-form textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #cccccc;
+    border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 16px;
-    color: #333333;
 }
 
-.form-field input[type="text"]:focus,
-.form-field input[type="number"]:focus,
-.form-field input[type="file"]:focus,
-.form-field select:focus {
-    border-color: #888888;
+.product-form input[type="text"]:focus,
+.product-form input[type="number"]:focus,
+.product-form input[type="file"]:focus,
+.product-form select:focus,
+.product-form textarea:focus {
+    border-color: #007BFF;
     outline: none;
 }
 
+.product-form .form-actions {
+    text-align: center;
+}
 
-input[type="submit"] {
-    width: 100%;
-    padding: 10px 0;
-    background-color: #4CAF50;
+.product-form .btn {
+    background-color: #13ba37;
+    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    color: white;
-    font-size: 18px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-input[type="submit"]:hover {
-    background-color: #45a049;
+.product-form .btn:hover {
+    background-color: #038318;
 }
 
-
-@media (max-width: 600px) {
-    form {
-        padding: 15px;
-    }
-
-    input[type="submit"] {
-        padding: 8px 0;
-        font-size: 16px;
-    }
+.product-form .form-field .error {
+    color: red;
+    font-size: 14px;
 }
-img{
-    border-radius: 100%;
-} 
-

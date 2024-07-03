@@ -10,6 +10,7 @@ from datetime import timedelta
 from collections import defaultdict
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from .decorators import staff_required
 
 def homepage(request):
     top_selling_products = Product.objects.annotate(total_sold=Sum('orderproduct__quantity')).order_by('-total_sold')[:12]
@@ -57,6 +58,7 @@ def add_to_cart(request, product_id):
     order_product.quantity += 1
     order_product.save()
     return redirect('view_cart')
+
 @login_required
 def view_cart(request):
     order = Order.objects.filter(customer=request.user, is_finalized=False).first()
@@ -127,7 +129,7 @@ class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Product
     fields = ['category',
         'name', 'description', 'price', 'timeNeeded', 'coffee', 'milk', 
-        'chocolate', 'flour', 'sugar', 'image'
+        'chocolate', 'flour', 'sugar','egg', 'bread', 'image'
     ]
     success_url = reverse_lazy('index')
 
@@ -141,37 +143,31 @@ class ProductCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         print(form.errors.as_data())
         return super().form_invalid(form)
 
+@staff_required
 def select_storage_view(request):
     storages = Storage.objects.all()
     return render(request, 'mainapp/select_storage.html', {'storages': storages})
 
 
-class StorageUpdateView(UpdateView):
+class StorageUpdateView(UpdateView, StaffRequiredMixin, LoginRequiredMixin):
     model=Storage
     fields="__all__"
     success_url = reverse_lazy('index')
 
-def is_staff(user):
-    return user.is_staff
-
-# @user_passes_test(is_staff)
+@staff_required
 def management_panel(request):
-    # Get today's date and calculate the date 7 days ago
     end_date = timezone.now().date()
     start_date = end_date - timedelta(days=9)
     dates = [start_date + timedelta(days=i) for i in range(10)]
     date_labels = [date.strftime("%Y-%m-%d") for date in dates]
 
-    # Initialize sales data structure
     sales_data = defaultdict(lambda: {
         'labels': date_labels,
-        'data': [0] * 10  # Initialize with zeros for each day of the week
+        'data': [0] * 10
     })
 
-    # Query for all sales in the last week
     last_week_sales = OrderProduct.objects.filter(order__order_date__date__range=[start_date, end_date])
 
-    # Populate sales data
     for sale in last_week_sales:
         product_name = sale.product.name
         sale_date = sale.order.order_date.date().strftime("%Y-%m-%d")
