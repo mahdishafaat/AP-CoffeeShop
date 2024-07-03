@@ -4,13 +4,14 @@ body {
     font-family: Arial, sans-serif;
 }
 .left-panel {
-    width: 70%;
+    background-color: #ffd3ae;
+    width: 85%;
     padding: 20px;
 }
 .right-panel {
-    width: 30%;
+    width: 15%;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #cfa677;
 }
 .chart-container {
     display: none;
@@ -30,10 +31,13 @@ canvas {
     margin: 10px 0;
 }
 .menu a {
+    font-size: 30px;
     text-decoration: none;
-    color: #333;
+    color: #704d0c;
     font-weight: bold;
+    transition: 0.3s ease;
+
 }
 .menu a:hover {
-    color: #007bff;
+    color: #f1e1d2;
 }

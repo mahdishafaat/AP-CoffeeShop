@@ -2,7 +2,7 @@ from django.db import models
 from django.core import validators
 from members.models import Member
 from django.utils.translation import gettext as _
-
+from django.utils import timezone
 
 
 class Storage(models.Model):
@@ -52,7 +52,7 @@ class ProductStorage(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Member, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
-    order_date = models.DateTimeField(auto_now_add=True)
+    order_date = models.DateTimeField(default=timezone.now)
     Type = models.BinaryField(blank=True, null=True)
 
     def __str__(self):

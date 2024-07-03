@@ -5,7 +5,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDay
-
+from django.utils import timezone
+from datetime import timedelta
+from collections import defaultdict
 
 def homepage(request):
     top_selling_products = Product.objects.order_by('-sold_count')[:12]
@@ -61,17 +63,26 @@ def is_staff(user):
 
 # @user_passes_test(is_staff)
 def management_panel(request):
-    products = Product.objects.all()
-    sales_data = {}
+    # Get today's date and calculate the date 7 days ago
+    end_date = timezone.now().date()
+    start_date = end_date - timedelta(days=6)
+    dates = [start_date + timedelta(days=i) for i in range(7)]
+    date_labels = [date.strftime("%Y-%m-%d") for date in dates]
 
-    for product in products:
-        daily_sales = OrderProduct.objects.filter(product=product).annotate(day=TruncDay('order__order_date')).values('day').annotate(total_sales=Sum('quantity')).order_by('day')
-        sales_data[product.name] = {
-            'labels': [entry['day'].strftime('%Y-%m-%d') for entry in daily_sales],
-            'data': [entry['total_sales'] for entry in daily_sales]
-        }
+    # Initialize sales data structure
+    sales_data = defaultdict(lambda: {
+        'labels': date_labels,
+        'data': [0] * 7  # Initialize with zeros for each day of the week
+    })
 
-    context = {
-        'sales_data': sales_data
-    }
-    return render(request, 'mainapp/management_panel.html', context)
+    # Query for all sales in the last week
+    last_week_sales = OrderProduct.objects.filter(order__order_date__date__range=[start_date, end_date])
+
+    # Populate sales data
+    for sale in last_week_sales:
+        product_name = sale.product.name
+        sale_date = sale.order.order_date.date().strftime("%Y-%m-%d")
+        if sale_date in sales_data[product_name]['labels']:
+            index = sales_data[product_name]['labels'].index(sale_date)
+            sales_data[product_name]['data'][index] += sale.quantity
+    return render(request, 'mainapp/management_panel.html', {'sales_data': dict(sales_data)})

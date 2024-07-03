@@ -38,7 +38,7 @@
                             data: {
                                 labels: {{ data.labels|safe }},
                                 datasets: [{
-                                    label: 'تعداد فروش',
+                                    label: 'Sales',
                                     data: {{ data.data|safe }},
                                     backgroundColor: 'rgba(77, 30, 1, 0.9)',
                                     borderColor: 'rgba(77, 30, 1, 1)',
@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="right-panel">
-        <h2>Navigation Menu</h2>
+        <h2>منوی ناوبری</h2>
         <ul class="menu">
             <li><a href="{% url 'create_product' %}">افزودن محصول</a></li>
             <li><a href="{% url 'select_storage' %}">انبار</a></li>
