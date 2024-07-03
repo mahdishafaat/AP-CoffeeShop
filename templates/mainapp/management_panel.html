@@ -5,25 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            display: none;
+        }
+        .chart-container.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <h1>نمودار فروش</h1>
+    <h1>Sales Chart</h1>
     <div>
-        {% for category, data in sales_data.items %}
-            <h2>{{ category }}</h2>
-            <canvas id="chart-{{ forloop.counter }}" width="400" height="200"></canvas>
+        <!-- Buttons to switch between charts -->
+        {% for product_name in sales_data.keys %}
+            <button onclick="showChart({{ forloop.counter0 }})">{{ product_name }}</button>
+        {% endfor %}
+    </div>
+    <div>
+        <!-- Chart containers -->
+        {% for product_name, data in sales_data.items %}
+            <div class="chart-container" id="chart-container-{{ forloop.counter0 }}">
+                <h2>{{ product_name }}</h2>
+                <canvas id="chart-{{ forloop.counter0 }}" width="400" height="200"></canvas>
+            </div>
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
-                    const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
-                    const chart{{ forloop.counter }} = new Chart(ctx{{ forloop.counter }}, {
+                    const ctx{{ forloop.counter0 }} = document.getElementById('chart-{{ forloop.counter0 }}').getContext('2d');
+                    const chart{{ forloop.counter0 }} = new Chart(ctx{{ forloop.counter0 }}, {
                         type: 'bar',
                         data: {
                             labels: {{ data.labels|safe }},
                             datasets: [{
                                 label: 'Sales',
                                 data: {{ data.data|safe }},
-                                backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                borderColor: 'rgba(0, 0, 0, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1
                             }]
                         },
@@ -39,5 +56,22 @@
             </script>
         {% endfor %}
     </div>
+
+    <script>
+        // Show the first chart by default
+        document.addEventListener("DOMContentLoaded", function() {
+            showChart(0);
+        });
+
+        function showChart(index) {
+            const containers = document.querySelectorAll('.chart-container');
+            containers.forEach((container, i) => {
+                container.classList.remove('active');
+                if (i === index) {
+                    container.classList.add('active');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import CreateView,UpdateView
-from mainapp.models import Product, Order,Storage
+from mainapp.models import Product, Order, Storage, OrderProduct
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count, Sum
+from django.db.models.functions import TruncDay
+
 
 def homepage(request):
     top_selling_products = Product.objects.order_by('-sold_count')[:12]
@@ -59,21 +61,17 @@ def is_staff(user):
 
 # @user_passes_test(is_staff)
 def management_panel(request):
-    categories = {
-        'hot_drinks': 'نوشیدنی گرم',
-        'cold_drinks': 'نوشیدنی سرد',
-        'cakes': 'کیک',
-    }
-
+    products = Product.objects.all()
     sales_data = {}
-    for category, category_name in categories.items():
-        products = Product.objects.filter(category=category).annotate(total_sales=Sum('orderproduct__quantity'))
-        sales_data[category_name] = {
-            'labels': list(products.values_list('name', flat=True)),
-            'data': [sale if sale is not None else 0 for sale in products.values_list('total_sales', flat=True)]
+
+    for product in products:
+        daily_sales = OrderProduct.objects.filter(product=product).annotate(day=TruncDay('order__order_date')).values('day').annotate(total_sales=Sum('quantity')).order_by('day')
+        sales_data[product.name] = {
+            'labels': [entry['day'].strftime('%Y-%m-%d') for entry in daily_sales],
+            'data': [entry['total_sales'] for entry in daily_sales]
         }
 
     context = {
         'sales_data': sales_data
-    }    
+    }
     return render(request, 'mainapp/management_panel.html', context)
