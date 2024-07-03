@@ -8,4 +8,7 @@ urlpatterns = [
     path('management/', views.management_panel, name='management_panel'),
     path('select_storage/', views.select_storage_view, name='select_storage'),
     path('update_storage/<int:pk>',views.StorageUpdateView.as_view(),name='update_storage'),
+    path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.view_cart, name='view_cart'),
+    path('finalize_order/', views.finalize_order, name='finalize_order'),
 ]

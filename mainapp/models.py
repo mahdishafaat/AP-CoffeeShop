@@ -18,7 +18,7 @@ class Product(models.Model):
         ('cold_drinks', 'نوشیدنی سرد'),
         ('cakes', 'کیک'),
     ]
-    
+
     category = models.CharField(_("دسته بندی محصول"),max_length=20, choices=CATEGORY_CHOICES, default='hot_drinks')
     name = models.CharField(_('نام'), max_length=255)
     description = models.CharField( _("توضیحات"), max_length=255, blank=True, null=True)
@@ -32,8 +32,6 @@ class Product(models.Model):
     image = models.ImageField(_("تصویر"),upload_to='products/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # raw_materials = models.ManyToManyField(Storage, through='ProductStorage')
-    # vertical = models.BinaryField(auto_created=True, unique=True, blank=True, null=True)
     sold_count = models.PositiveBigIntegerField(default=0)
 
     def __str__(self):
@@ -48,12 +46,12 @@ class ProductStorage(models.Model):
     def __str__(self):
         return f"{self.quantity} of {self.raw_materials.name} for {self.product.name}"
 
-
 class Order(models.Model):
     customer = models.ForeignKey(Member, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
     order_date = models.DateTimeField(default=timezone.now)
     Type = models.BinaryField(blank=True, null=True)
+    is_finalized = models.BooleanField(default=False)  
 
     def __str__(self):
         return str(self.pk)
@@ -69,27 +67,21 @@ class OrderProduct(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.update_storage()
 
     def update_storage(self):
         product = self.product
         material_quantities = {
-            'قهوه': 0,
-            'شیر': 0,
-            'شکلات': 0,
-            'آرد': 0,
-            'شکر': 0,
+            'قهوه': product.coffee * self.quantity,
+            'شیر': product.milk * self.quantity,
+            'شکلات': product.chocolate * self.quantity,
+            'آرد': product.flour * self.quantity,
+            'شکر': product.sugar * self.quantity,
         }
-        material_quantities['قهوه'] += product.coffee * self.quantity
-        material_quantities['شیر'] += product.milk * self.quantity
-        material_quantities['شکلات'] += product.chocolate * self.quantity
-        material_quantities['آرد'] += product.flour * self.quantity
-        material_quantities['شکر'] += product.sugar * self.quantity
 
         for material, quantity in material_quantities.items():
             storage = Storage.objects.get(name=material)
             storage.stock -= quantity
-            storage.save()    
+            storage.save() 
 
 
 class CustomerOrder(models.Model):

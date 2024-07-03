@@ -8,6 +8,8 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 from datetime import timedelta
 from collections import defaultdict
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 def homepage(request):
     top_selling_products = Product.objects.annotate(total_sold=Sum('orderproduct__quantity')).order_by('-total_sold')[:12]
@@ -18,10 +20,81 @@ def homepage(request):
 
 def store_view(request):
     all_products = Product.objects.all()
-    context={'products':all_products}
-    return render(request,'mainapp/store.html',context=context)
+    materials = {
+        'قهوه': Storage.objects.get_or_create(name='قهوه')[0],
+        'شیر': Storage.objects.get_or_create(name='شیر')[0],
+        'شکلات': Storage.objects.get_or_create(name='شکلات')[0],
+        'آرد': Storage.objects.get_or_create(name='آرد')[0],
+        'شکر': Storage.objects.get_or_create(name='شکر')[0],
+    }
+
+    products_with_availability = []
+
+    for product in all_products:
+        is_available = (
+            product.coffee <= materials['قهوه'].stock and
+            product.milk <= materials['شیر'].stock and
+            product.chocolate <= materials['شکلات'].stock and
+            product.flour <= materials['آرد'].stock and
+            product.sugar <= materials['شکر'].stock
+        )
+        products_with_availability.append({
+            'product': product,
+            'is_available': is_available
+        })
+
+    context = {
+        'products_with_availability': products_with_availability,
+        'materials': materials,
+    }
+    return render(request, 'mainapp/store.html', context)
+
+# @login_required
+# def add_to_cart(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+#     # پیدا کردن سفارش فعلی کاربر (بدون استفاده از is_finalized=False)
+#     order, created = Order.objects.get_or_create(customer=request.user)
+#     # یافتن یا ایجاد محصول سفارش داده شده
+#     order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
+#     order_product.quantity += 1
+#     order_product.save()
+    
+#     # بازگرداندن به صفحه فعلی (در این حالت 'store')
+#     return redirect('store')
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    order, created = Order.objects.get_or_create(customer=request.user, is_finalized=False)
+    order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
+    order_product.quantity += 1
+    order_product.save()
+    return redirect('store')
+@login_required
+def view_cart(request):
+    order = Order.objects.filter(customer=request.user, is_finalized=False).first()
+    if not order:
+        return redirect('store')
+
+    order_products = OrderProduct.objects.filter(order=order)
+    context = {
+        'order_products': order_products,
+    }
+    return render(request, 'mainapp/cart.html', context)
 
 
+@login_required
+def finalize_order(request):
+    order = Order.objects.filter(customer=request.user, is_finalized=False).first()
+    if not order:
+        return redirect('store')
+
+    for order_product in order.orderproduct_set.all():
+        order_product.update_storage()
+
+    order.is_finalized = True
+    order.save()
+
+    return redirect('index')
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):

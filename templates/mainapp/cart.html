@@ -1,0 +1,28 @@
+<!-- cart.html -->
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
+<h1>سبد خرید</h1>
+<div class="cart-container">
+    {% if order_products %}
+        {% for order_product in order_products %}
+        <div class="cart-item">
+            <img src="{{ order_product.product.image.url }}" alt="{{ order_product.product.name }}" class="cart-item-image">
+            <div class="cart-item-details">
+                <h3>{{ order_product.product.name }}</h3>
+                <p>تعداد: {{ order_product.quantity }}</p>
+                <p>قیمت واحد: {{ order_product.product.price }} تومان</p>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+        <form action="{% url 'finalize_order' %}" method="post" class="finalize-order-form">
+            {% csrf_token %}
+            <button type="submit" class="finalize-order-button">نهایی کردن خرید</button>
+        </form>
+    {% else %}
+        <p>شما هنوز محصولی به سبد خریدتان اضافه نکرده‌اید.</p>
+    {% endif %}
+</div>
+{% endblock %}

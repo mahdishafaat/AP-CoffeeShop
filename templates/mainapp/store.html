@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="fa">
 <head>
@@ -7,50 +8,34 @@
     <title>فروشگاه</title>
 </head>
 <body>
-
-    {% block content %}
-
+    
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/store.css' %}">
 
     <h1>محصولات</h1>
     <div class="product-container">
-        {% if request.GET.category == "cold_drinks" %}
-            {% for product in products %}
-                {% if product.category == "cold_drinks" %}
+        {% for item in products_with_availability %}
+            {% if request.GET.category == item.product.category %}
                 <div class="product-card">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <h3>{{ product.name }}</h3>
-                    <p>{{ product.price }} تومان</p>
-                    <p>{{ product.description }}</p>
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                    <h3>{{ item.product.name }}</h3>
+                    <p>{{ item.product.price }} تومان</p>
+                    <p>{{ item.product.description }}</p>
+                    {% if item.is_available %}
+                    <div class="add-to-cart-btn">
+                        <form action="{% url 'add_to_cart' item.product.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">افزودن به سبد خرید</button>
+                        </form>
+                    </div>
+                    {% else %}
+                        <p>مواد اولیه کافی نیست</p>
+                    {% endif %}
                 </div>
-                {% endif %}
-            {% endfor %}
-        {% elif request.GET.category == "hot_drinks" %}
-            {% for product in products %}
-                {% if product.category == "hot_drinks" %}
-                <div class="product-card">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <h3>{{ product.name }}</h3>
-                    <p>{{ product.price }} تومان</p>
-                    <p>{{ product.description }}</p>
-                </div>
-                {% endif %}
-            {% endfor %}
-        {% elif request.GET.category == "cakes" %}
-            {% for product in products %}
-                {% if product.category == "cakes" %}
-                <div class="product-card">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <h3>{{ product.name }}</h3>
-                    <p>{{ product.price }} تومان</p>
-                    <p>{{ product.description }}</p>
-                </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+            {% endif %}
+        {% endfor %}
     </div>
+   
 </body>
-{% endblock content %}
 </html>
-
+{% endblock content %}
