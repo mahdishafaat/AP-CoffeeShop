@@ -28,11 +28,14 @@
             {% for product_name, data in sales_data.items %}
                 <div class="chart-container" id="chart-container-{{ forloop.counter0 }}">
                     <h2>{{ product_name }}</h2>
-                    <canvas id="chart-{{ forloop.counter0 }}" width="400" height="200"></canvas>
+                    <canvas id="chart-{{ forloop.counter0 }}" width="250" height="100"></canvas>
                 </div>
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         const ctx{{ forloop.counter0 }} = document.getElementById('chart-{{ forloop.counter0 }}').getContext('2d');
+                        const gradient{{ forloop.counter0 }} = ctx{{ forloop.counter0 }}.createLinearGradient(0, 0, 0, 400);
+                        gradient{{ forloop.counter0 }}.addColorStop(1, 'rgba(75, 30, 1, 1)');
+                        gradient{{ forloop.counter0 }}.addColorStop(0, 'rgba(160, 70, 20, 1)');
                         const chart{{ forloop.counter0 }} = new Chart(ctx{{ forloop.counter0 }}, {
                             type: 'bar',
                             data: {
@@ -40,7 +43,7 @@
                                 datasets: [{
                                     label: 'Sales',
                                     data: {{ data.data|safe }},
-                                    backgroundColor: 'rgba(77, 30, 1, 0.9)',
+                                    backgroundColor: gradient{{ forloop.counter0 }},
                                     borderColor: 'rgba(77, 30, 1, 1)',
                                     borderWidth: 1
                                 }]

@@ -65,14 +65,14 @@ def is_staff(user):
 def management_panel(request):
     # Get today's date and calculate the date 7 days ago
     end_date = timezone.now().date()
-    start_date = end_date - timedelta(days=6)
-    dates = [start_date + timedelta(days=i) for i in range(7)]
+    start_date = end_date - timedelta(days=9)
+    dates = [start_date + timedelta(days=i) for i in range(10)]
     date_labels = [date.strftime("%Y-%m-%d") for date in dates]
 
     # Initialize sales data structure
     sales_data = defaultdict(lambda: {
         'labels': date_labels,
-        'data': [0] * 7  # Initialize with zeros for each day of the week
+        'data': [0] * 10  # Initialize with zeros for each day of the week
     })
 
     # Query for all sales in the last week
