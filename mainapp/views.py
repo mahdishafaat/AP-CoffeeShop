@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import CreateView,UpdateView
-from mainapp.models import Product, Order,Storage
+from mainapp.models import Product, Order, Storage, OrderProduct
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Count
+from django.db.models import Count, Sum
+from django.db.models.functions import TruncDay
+from django.utils import timezone
+from datetime import timedelta
+from collections import defaultdict
 
 def homepage(request):
-    top_selling_products = Product.objects.order_by('-sold_count')[:12]
+    top_selling_products = Product.objects.annotate(total_sold=Sum('orderproduct__quantity')).order_by('-total_sold')[:12]
     context = {
         'products': top_selling_products
     }
@@ -59,23 +63,26 @@ def is_staff(user):
 
 # @user_passes_test(is_staff)
 def management_panel(request):
-    product_sales = (
-        Order.objects.values('products__name', 'products__category')
-        .annotate(count=Count('products'))
-        .order_by('products__category', 'products__name')
-    )
-    
-    chart_data = {}
-    for sale in product_sales:
-        category = sale['products__category']
-        product = sale['products__name']
-        count = sale['count']
-        if category not in chart_data:
-            chart_data[category] = []
-        chart_data[category].append({'product': product, 'count': count})
+    # Get today's date and calculate the date 7 days ago
+    end_date = timezone.now().date()
+    start_date = end_date - timedelta(days=9)
+    dates = [start_date + timedelta(days=i) for i in range(10)]
+    date_labels = [date.strftime("%Y-%m-%d") for date in dates]
 
-    context = {
-        'chart_data': chart_data
-    }
+    # Initialize sales data structure
+    sales_data = defaultdict(lambda: {
+        'labels': date_labels,
+        'data': [0] * 10  # Initialize with zeros for each day of the week
+    })
 
-    return render(request, 'mainapp/management_panel.html', context)
+    # Query for all sales in the last week
+    last_week_sales = OrderProduct.objects.filter(order__order_date__date__range=[start_date, end_date])
+
+    # Populate sales data
+    for sale in last_week_sales:
+        product_name = sale.product.name
+        sale_date = sale.order.order_date.date().strftime("%Y-%m-%d")
+        if sale_date in sales_data[product_name]['labels']:
+            index = sales_data[product_name]['labels'].index(sale_date)
+            sales_data[product_name]['data'][index] += sale.quantity
+    return render(request, 'mainapp/management_panel.html', {'sales_data': dict(sales_data)})
