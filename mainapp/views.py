@@ -49,18 +49,6 @@ def store_view(request):
     }
     return render(request, 'mainapp/store.html', context)
 
-# @login_required
-# def add_to_cart(request, product_id):
-#     product = get_object_or_404(Product, id=product_id)
-#     # پیدا کردن سفارش فعلی کاربر (بدون استفاده از is_finalized=False)
-#     order, created = Order.objects.get_or_create(customer=request.user)
-#     # یافتن یا ایجاد محصول سفارش داده شده
-#     order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
-#     order_product.quantity += 1
-#     order_product.save()
-    
-#     # بازگرداندن به صفحه فعلی (در این حالت 'store')
-#     return redirect('store')
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -68,19 +56,21 @@ def add_to_cart(request, product_id):
     order_product, created = OrderProduct.objects.get_or_create(order=order, product=product)
     order_product.quantity += 1
     order_product.save()
-    return redirect('store')
+    return redirect('view_cart')
 @login_required
 def view_cart(request):
     order = Order.objects.filter(customer=request.user, is_finalized=False).first()
-    if not order:
-        return redirect('store')
-
-    order_products = OrderProduct.objects.filter(order=order)
-    context = {
-        'order_products': order_products,
-    }
+    if not order or not order.orderproduct_set.exists():
+        context = {'empty_cart': True}
+    else:
+        order_products = OrderProduct.objects.filter(order=order)
+        total_cost = sum([op.product.price * op.quantity for op in order_products])
+        context = {
+            'order_products': order_products,
+            'empty_cart': False,
+            'total_cost': total_cost,
+        }
     return render(request, 'mainapp/cart.html', context)
-
 
 @login_required
 def finalize_order(request):
@@ -95,7 +85,37 @@ def finalize_order(request):
     order.save()
 
     return redirect('index')
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(customer=request.user).order_by('-order_date')
+    order_data = []
 
+    for order in orders:
+        order_products = OrderProduct.objects.filter(order=order)
+        products_info = []
+
+        for order_product in order_products:
+            product_info = {
+                'product_name': order_product.product.name,
+                'quantity': order_product.quantity,
+                'price_per_unit': order_product.product.price,
+                'image_url': order_product.product.image.url,
+            }
+            products_info.append(product_info)
+
+        order_info = {
+            'order_number': order.pk,
+            'order_date': order.order_date,
+            'products': products_info,
+            'total_price': order.get_total_price,  # اضافه کردن قیمت کل به اطلاعات سفارش
+        }
+        order_data.append(order_info)
+
+    context = {
+        'orders': order_data,
+    }
+
+    return render(request, 'mainapp/order_history.html', context)
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Staff').exists()

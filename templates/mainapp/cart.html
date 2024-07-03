@@ -1,28 +1,116 @@
-<!-- cart.html -->
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
-<h1>سبد خرید</h1>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: url('{% static "images/cart_background.jpg" %}') no-repeat center center fixed;
+        background-size: cover;
+        color: #333;
+    }
+
+    .cart-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 60px auto; /* فاصله بیشتر از بالای صفحه */
+        max-width: 800px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .cart-items {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+    }
+
+    .cart-item img {
+        width: 100px;
+        height: 100px;
+        margin-right: 20px;
+        border-radius: 5px;
+    }
+
+    .cart-item p {
+        margin: 0;
+        padding: 0 10px;
+    }
+
+    .empty-cart-message {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+    }
+
+    .total-cost {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+        width: 100%;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
 <div class="cart-container">
-    {% if order_products %}
-        {% for order_product in order_products %}
-        <div class="cart-item">
-            <img src="{{ order_product.product.image.url }}" alt="{{ order_product.product.name }}" class="cart-item-image">
-            <div class="cart-item-details">
-                <h3>{{ order_product.product.name }}</h3>
+    <h1>سبد خرید</h1>
+    {% if empty_cart %}
+        <div class="empty-cart-message">
+            <p>محصولی در سبد خرید شما وجود ندارد</p>
+        </div>
+    {% else %}
+        <div class="cart-items">
+            {% for order_product in order_products %}
+            <div class="cart-item">
+                <img src="{{ order_product.product.image.url }}" alt="{{ order_product.product.name }}">
+                <p>{{ order_product.product.name }}</p>
                 <p>تعداد: {{ order_product.quantity }}</p>
                 <p>قیمت واحد: {{ order_product.product.price }} تومان</p>
             </div>
+            {% endfor %}
         </div>
-        <hr>
-        {% endfor %}
-        <form action="{% url 'finalize_order' %}" method="post" class="finalize-order-form">
+        <div class="total-cost">
+            <p>هزینه کل: {{ total_cost }} تومان</p>
+        </div>
+        <form action="{% url 'finalize_order' %}" method="post" style="text-align: center;">
             {% csrf_token %}
-            <button type="submit" class="finalize-order-button">نهایی کردن خرید</button>
+            <button type="submit">نهایی کردن خرید</button>
         </form>
-    {% else %}
-        <p>شما هنوز محصولی به سبد خریدتان اضافه نکرده‌اید.</p>
     {% endif %}
 </div>
 {% endblock %}

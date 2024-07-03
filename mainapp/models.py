@@ -17,6 +17,7 @@ class Product(models.Model):
         ('hot_drinks', 'نوشیدنی گرم'),
         ('cold_drinks', 'نوشیدنی سرد'),
         ('cakes', 'کیک'),
+        ('special_products','محصولات خاص')
     ]
 
     category = models.CharField(_("دسته بندی محصول"),max_length=20, choices=CATEGORY_CHOICES, default='hot_drinks')
@@ -55,12 +56,15 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.pk)
-
+    @property
+    def get_total_price(self):
+        total = sum(order_product.product.price * order_product.quantity for order_product in self.orderproduct_set.all())
+        return total
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1, validators=[validators.MinValueValidator(1)])
+    quantity = models.IntegerField(default=0, validators=[validators.MinValueValidator(1)])
 
     def __str__(self) -> str:
         return f"{self.quantity} of {self.product.name} for {self.order.customer}"
