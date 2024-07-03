@@ -1,0 +1,39 @@
+body {
+    display: flex;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.left-panel {
+    width: 70%;
+    padding: 20px;
+}
+.right-panel {
+    width: 30%;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+.chart-container {
+    display: none;
+}
+.chart-container.active {
+    display: block;
+}
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+.menu {
+    list-style-type: none;
+    padding: 0;
+}
+.menu li {
+    margin: 10px 0;
+}
+.menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.menu a:hover {
+    color: #007bff;
+}
